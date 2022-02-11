@@ -14,7 +14,7 @@ const Task = (props) => {
         onChangeText={onChangeText}
         value={text}
       ></TextInput>
-      <Text>{props.item}</Text>
+      <Text>{props.item.task}</Text>
     </View>
   );
 };

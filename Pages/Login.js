@@ -37,8 +37,7 @@ const Login = (props) => {
   }, [props.userId]);
 
   return (
-    <View>
-      <Text></Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <TextInput placeholder="Email" onChangeText={setEmail} value={email} />
       <TextInput
         placeholder="Password"

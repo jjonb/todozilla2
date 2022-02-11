@@ -39,9 +39,11 @@ const Home = (props) => {
     return onValue(taskListRef, (snapshot) => {
       if (snapshot.val() !== null) {
         const data = snapshot.val();
+        //console.log(data);
         let result = Object.keys(data).map((key) => data[key]);
-
+        //console.log(result);
         setTasks(result);
+        //console.log(tasks);
       } else {
         setTasks([]);
       }
