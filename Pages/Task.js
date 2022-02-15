@@ -1,20 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { ref, update, remove } from "firebase/database";
 
 const Task = (props) => {
-  const [text, onChangeText] = useState("");
-  const [toggleEdit, setToggleEdit] = useState(false);
+  const [text, onChangeText] = useState(props.item.task);
+
   const userScoreRef = ref(props.db, "scores/" + props.userID);
 
   return (
-    <View>
+    <View style={{ flexDirection: "row" }}>
       <TextInput
-        autoFocus={true}
+        style={{ outline: 0 }}
+        autoFocus={false}
         onChangeText={onChangeText}
         value={text}
       ></TextInput>
-      <Text>{props.item.task}</Text>
+      <TouchableOpacity>
+        <Text>Delete</Text>
+      </TouchableOpacity>
     </View>
   );
 };

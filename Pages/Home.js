@@ -20,13 +20,14 @@ const Home = (props) => {
   const taskListRef = ref(db, "tasks/" + props.userId);
   const newTaskRef = push(taskListRef);
 
-  const onSubmit = (message) => {
-    if (message === "") {
+  const onSubmit = () => {
+    if (task === "") {
       return;
     }
     set(newTaskRef, {
       task: task,
     });
+    setTask("");
     //props.navigation.goBack();
   };
 
