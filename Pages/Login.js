@@ -29,7 +29,7 @@ const Login = (props) => {
 
   useEffect(() => {
     if (props.userId !== "") {
-      props.navigation.navigate("Home");
+      props.navigation.navigate("Scores");
     } else {
       setEmail("");
       setPassword("");

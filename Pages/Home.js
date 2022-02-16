@@ -12,14 +12,16 @@ import Task from "./Task.js";
 
 const Home = (props) => {
   const [task, setTask] = useState("");
-  const [key, setKey] = useState("");
-  const [keys, setKeys] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [scoreBoard, setScoreBoard] = useState({});
 
   const db = getDatabase();
   const taskListRef = ref(db, "tasks/" + props.userId);
+  const userScoreRef = ref(db, "scores/" + props.userId);
+  const userScoresRef = ref(db, "scores/");
+
   const newTaskRef = push(taskListRef);
 
   const onSubmit = () => {
@@ -29,16 +31,56 @@ const Home = (props) => {
     set(newTaskRef, {
       task: task,
     });
-    console.log(newTaskRef.key);
 
     setTask("");
-    //props.navigation.goBack();
   };
 
   const signOut = () => {
     props.userAuth.signOut();
     props.navigation.navigate("Login");
   };
+
+  useEffect(() => {
+    return onValue(userScoresRef, (snapshot) => {
+      if (snapshot.val() !== null) {
+        const data = snapshot.val();
+        //console.log(data);
+        let result = Object.keys(data).map((key) => {
+          return { score: data[key].score, id: key }; //{ task: data[key].task, id: key };
+        });
+        setScoreBoard(result);
+        let maxIndex = 0;
+        let max = 0;
+        for (let i = 0; i < result.length; i++) {
+          if (result[i].score >= max) {
+            max = result[i].score;
+            maxIndex = i;
+          }
+        }
+
+        setHighScore(max);
+      } else {
+        setScoreBoard({});
+        setHighScore(0);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    return onValue(userScoreRef, (snapshot) => {
+      if (snapshot.val() !== null) {
+        const data = snapshot.val();
+        //console.log(data);
+        let result = Object.keys(data).map((key) => {
+          return data[key]; //{ task: data[key].task, id: key };
+        });
+        //  console.log(result[0]);
+        setCurrentScore(result[0]);
+      } else {
+        setCurrentScore(0);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     return onValue(taskListRef, (snapshot) => {
@@ -60,7 +102,7 @@ const Home = (props) => {
     <View style={styles.container}>
       <Text style={{ color: "red" }}>Home</Text>
       <Text>High Score: {highScore}</Text>
-      <Text> Current Score:{currentScore}</Text>
+      <Text> Current Score: {currentScore}</Text>
       <View>
         <FlatList
           data={tasks}
@@ -71,14 +113,13 @@ const Home = (props) => {
               id={item.id}
               userId={props.userId}
               currentScore={currentScore}
+              setCurrentScore={setCurrentScore}
             />
           )}
           keyExtractor={(item) => item.id}
         />
       </View>
-      <TouchableOpacity onPress={signOut}>
-        <Text>Sign Out </Text>
-      </TouchableOpacity>
+
       <TextInput
         onChangeText={(text) => setTask(text)}
         value={task}
@@ -86,7 +127,15 @@ const Home = (props) => {
         placeholder="What's new?"
       ></TextInput>
       <TouchableOpacity onPress={onSubmit}>
-        <Text>Submit </Text>
+        <Text>Submit</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => props.navigation.navigate("Scores")}>
+        <Text>Go to LeaderBoard</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={signOut}>
+        <Text>Sign Out</Text>
       </TouchableOpacity>
     </View>
   );

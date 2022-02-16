@@ -1,7 +1,16 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  FlatList,
+} from "react-native";
+import { getDatabase, ref, push, set, onValue } from "firebase/database";
+import Task from "./Task.js";
 
-const Scores = () => {
+const Scores = (props) => {
   return (
     <View>
       <Text>Scores</Text>
