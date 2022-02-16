@@ -34,12 +34,12 @@ function App() {
             <Login {...props} userAuth={userAuth} userId={userId}></Login>
           )}
         </Stack.Screen>
-        <Stack.Screen name="Home">
+        <Stack.Screen name="Home" options={{ headerShown: false }}>
           {(props) => (
             <Home userAuth={userAuth} userId={userId} {...props}></Home>
           )}
         </Stack.Screen>
-        <Stack.Screen name="Scores">
+        <Stack.Screen name="Scores" options={{ headerShown: false }}>
           {(props) => (
             <Scores userAuth={userAuth} userId={userId} {...props}></Scores>
           )}

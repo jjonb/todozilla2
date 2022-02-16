@@ -77,6 +77,7 @@ const Home = (props) => {
         //  console.log(result[0]);
         setCurrentScore(result[0]);
       } else {
+        set(userScoreRef, { score: 0 });
         setCurrentScore(0);
       }
     });
