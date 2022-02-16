@@ -12,6 +12,8 @@ import Task from "./Task.js";
 
 const Home = (props) => {
   const [task, setTask] = useState("");
+  const [key, setKey] = useState("");
+  const [keys, setKeys] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -27,6 +29,8 @@ const Home = (props) => {
     set(newTaskRef, {
       task: task,
     });
+    console.log(newTaskRef.key);
+
     setTask("");
     //props.navigation.goBack();
   };
@@ -41,10 +45,11 @@ const Home = (props) => {
       if (snapshot.val() !== null) {
         const data = snapshot.val();
         //console.log(data);
-        let result = Object.keys(data).map((key) => data[key]);
-        //console.log(result);
+        let result = Object.keys(data).map((key) => {
+          return { task: data[key].task, id: key };
+        });
+
         setTasks(result);
-        //console.log(tasks);
       } else {
         setTasks([]);
       }
@@ -63,11 +68,12 @@ const Home = (props) => {
             <Task
               item={item}
               db={db}
-              userID={props.userID}
+              id={item.id}
+              userId={props.userId}
               currentScore={currentScore}
             />
           )}
-          keyExtractor={(item) => tasks.indexOf(item)}
+          keyExtractor={(item) => item.id}
         />
       </View>
       <TouchableOpacity onPress={signOut}>
